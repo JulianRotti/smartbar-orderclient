@@ -1,0 +1,287 @@
+openapi: 3.1.0
+info:
+  title: Smartbar Orderclient API
+  description: Smartbar Orderclient API
+  version: 1.0.0
+
+paths:
+  /logins/{tableId}:
+    post:
+      operationId: postLoginFromTable
+      summary: Login from a table
+      parameters:
+        - in: path
+          name: tableId
+          required: true
+          schema: { type: integer, format: int64 }
+      responses:
+        '201':
+          description: Login created
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [loginToken, menu]
+                properties:
+                  loginToken:
+                    $ref: '#/components/schemas/LoginToken'
+                  menu:
+                    $ref: '#/components/schemas/Menu'
+        '404':
+          $ref: '#/components/responses/404'
+
+  /orders/{loginToken}:
+    parameters:
+      - in: path
+        name: loginToken
+        required: true
+        schema:
+          $ref: '#/components/schemas/LoginToken'
+    post:
+      operationId: postOrderForLogin
+      summary: Order articles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderItems'
+      responses:
+        '201':
+          description: Order successfully placed
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [orderId]
+                properties:
+                  orderId: { type: integer, format: int64 }
+        '401': { description: Missing or invalid login token }
+
+    get:
+      operationId: getAllOrdersForLogin
+      summary: get all orders for a login
+      responses:
+        '200':
+          description: Orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '401': { description: Missing or invalid login token }
+
+  /orders/{loginToken}/{orderId}:
+    parameters:
+      - in: path
+        name: loginToken
+        required: true
+        schema:
+          $ref: '#/components/schemas/LoginToken'
+      - in: path
+        name: orderId
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      operationId: getOrderForLogin
+      summary: Get a specific order for a login
+      responses:
+        '200':
+          description: Order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401': { description: Missing or invalid login token }
+        '404': { $ref: '#/components/responses/404' }
+
+  /orders:
+    get:
+      operationId: getAllOrders
+      summary: get orders
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: status
+          description: Optional filter by order status
+          schema:
+            $ref: '#/components/schemas/OrderStatus'
+      responses:
+        '200':
+          description: Orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+
+  /orders/{orderId}:
+    parameters:
+      - in: path
+        name: orderId
+        required: true
+        schema: { type: integer, format: int64 }
+        description: Order identifier
+    get:
+      operationId: getOrder
+      summary: Get order by id
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Order found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401': { description: Unauthorized }
+        '404': { $ref: '#/components/responses/404' }
+
+    put:
+      operationId: updateOrder
+      summary: Update the status of an order
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [ status ]
+              properties:
+                status:
+                  $ref: '#/components/schemas/OrderStatus'
+      responses:
+        '201':
+          description: Updated order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400': { description: Invalid update or transition }
+        '401': { description: Unauthorized }
+        '404': { $ref: '#/components/responses/404' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    MenuItem:
+      type: object
+      additionalProperties: false
+      properties:
+        category: { type: string }
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+
+    Menu:
+      type: array
+      minItems: 1
+      items:
+        $ref: '#/components/schemas/MenuItem'
+
+    Article:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          description: Server-generated identifier
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+        description:
+          type: string
+        picture:
+          type: string
+          format: uri
+      required:
+        - name
+        - price
+
+    LoginToken:
+      type: string
+      format: uuid
+
+    OrderItem:
+      type: object
+      additionalProperties: false
+      required: [articleId, quantity]
+      properties:
+        articleId: { type: integer, format: int64 }
+        quantity:  { type: integer, minimum: 1 }
+
+    OrderItems:
+      type: array
+      minItems: 1
+      items:
+        $ref: '#/components/schemas/OrderItem'
+
+    Order:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          description: Server-generated identifier
+        placedAt:
+          type: string
+          format: date-time
+        tableName:
+          type: string
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        orderedArticles:
+          $ref: '#/components/schemas/OrderItems'
+      required: [status, orderedArticles, tableName]
+
+    OrderStatus:
+      type: string
+      enum: [PENDING, ACCEPTED, IN_PROGRESS, READY, SERVED, CANCELED, REJECTED]
+
+  responses:
+    '404':
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              error: { type: string }
+
+  headers:
+    Location:
+      description: URL of the newly created resource
+      schema:
+        type: string
+        format: uri
