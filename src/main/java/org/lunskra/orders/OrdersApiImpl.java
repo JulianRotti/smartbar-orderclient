@@ -1,5 +1,6 @@
 package org.lunskra.orders;
 
+import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.core.Response;
 import org.lunskra.smartbar.orderclient.api.OrdersApi;
@@ -13,17 +14,17 @@ import java.util.List;
 import java.util.UUID;
 
 public class OrdersApiImpl implements OrdersApi {
+
+    private final OrdersService ordersService;
+
+    @Inject
+    public OrdersApiImpl(OrdersService ordersService) {
+        this.ordersService = ordersService;
+    }
+
     @Override
     public Response getAllOrders(OrderStatus status) {
-        return Response.ok(
-            List.of(
-                new Order(
-                    "Table1",
-                        OrderStatus.READY,
-                        List.of(
-                            new OrderItem(1L, 10)
-                        )
-                ))).build();
+        return Response.ok(ordersService.getAllOrders()).build();
     }
 
     @Override
