@@ -3,6 +3,7 @@ package org.lunskra.logins;
 import io.smallrye.common.annotation.NonBlocking;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.lunskra.menu.MenuApiClient;
 import org.lunskra.menu.MenuMapper;
 import org.lunskra.smartbar.orderclient.api.LoginsApi;
@@ -17,7 +18,7 @@ public class LoginsApiImpl implements LoginsApi {
     private final MenuMapper menuMapper;
 
     @Inject
-    public LoginsApiImpl(MenuApiClient menuApiClient, MenuMapper menuMapper) {
+    public LoginsApiImpl(@RestClient MenuApiClient menuApiClient, MenuMapper menuMapper) {
         this.menuApiClient = menuApiClient;
         this.menuMapper = menuMapper;
     }
