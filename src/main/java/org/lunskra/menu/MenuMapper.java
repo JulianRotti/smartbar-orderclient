@@ -1,13 +1,13 @@
 package org.lunskra.menu;
 
 import org.lunskra.smartbar.backoffice.model.ArticleApi;
-import org.lunskra.smartbar.backoffice.model.MenuApi;
 import org.lunskra.smartbar.backoffice.model.MenuItemApi;
 import org.lunskra.smartbar.orderclient.model.Article;
-import org.lunskra.smartbar.orderclient.model.Menu;
 import org.lunskra.smartbar.orderclient.model.MenuItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(componentModel = "cdi", unmappedTargetPolicy = org.mapstruct.ReportingPolicy.ERROR)
 public interface MenuMapper {
@@ -23,9 +23,7 @@ public interface MenuMapper {
     @Mapping(target = "categoryId", ignore = true)
     ArticleApi toBackoffice(Article s);
 
-    @Mapping(target = "removeItemsItem", ignore = true)
-    Menu toOrderClient(MenuApi s);
+    List<MenuItem> toOrderClient(List<MenuItemApi> menu);
 
-    @Mapping(target = "removeItemsItem", ignore = true)
-    MenuApi toBackoffice(Menu s);
+    List<MenuItemApi> toBackoffice(List<MenuItem> menu);
 }

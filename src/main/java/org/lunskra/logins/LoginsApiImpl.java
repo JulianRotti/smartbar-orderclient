@@ -5,7 +5,9 @@ import jakarta.ws.rs.core.Response;
 import org.lunskra.menu.MenuApiClient;
 import org.lunskra.menu.MenuMapper;
 import org.lunskra.smartbar.orderclient.api.LoginsApi;
-import org.lunskra.smartbar.orderclient.model.Menu;
+import org.lunskra.smartbar.orderclient.model.MenuItem;
+
+import java.util.List;
 
 public class LoginsApiImpl implements LoginsApi {
 
@@ -21,7 +23,7 @@ public class LoginsApiImpl implements LoginsApi {
 
     @Override
     public Response postLoginFromTable(Long tableId) {
-        Menu menu = menuMapper.toOrderClient(menuApiClient.getMenu());
+        List<MenuItem> menu = menuMapper.toOrderClient(menuApiClient.getMenu());
         return Response.ok(menu).build();
     }
 }

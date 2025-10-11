@@ -18,12 +18,9 @@ paths:
 components:
   schemas:
     menuApi:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/menuItemApi'
+      type: array
+      items:
+        $ref: '#/components/schemas/menuItemApi'
     menuItemApi:
       type: object
       additionalProperties: false

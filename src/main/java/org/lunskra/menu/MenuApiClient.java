@@ -1,7 +1,9 @@
 package org.lunskra.menu;
 
-import org.lunskra.smartbar.backoffice.model.MenuApi;
+import org.lunskra.smartbar.backoffice.model.MenuItemApi;
+
+import java.util.List;
 
 public interface MenuApiClient {
-    MenuApi getMenu();
+    List<MenuItemApi> getMenu();
 }
