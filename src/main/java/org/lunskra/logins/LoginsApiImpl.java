@@ -1,5 +1,6 @@
 package org.lunskra.logins;
 
+import io.smallrye.common.annotation.NonBlocking;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import org.lunskra.menu.MenuApiClient;
@@ -9,6 +10,7 @@ import org.lunskra.smartbar.orderclient.model.MenuItem;
 
 import java.util.List;
 
+@NonBlocking
 public class LoginsApiImpl implements LoginsApi {
 
     private final MenuApiClient menuApiClient;

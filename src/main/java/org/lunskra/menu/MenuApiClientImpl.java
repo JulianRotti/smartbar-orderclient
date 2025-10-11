@@ -4,6 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.lunskra.smartbar.backoffice.model.MenuItemApi;
 
@@ -30,12 +34,13 @@ public class MenuApiClientImpl implements MenuApiClient {
 
     @Override
     public List<MenuItemApi> getMenu() {
-        try {
-            final var request = HttpRequest.newBuilder(new URI(apiUrl)).GET().build();
-            final var httpClient = HttpClient.newBuilder().build();
-            final var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            return mapper.readValue(response.body(), new TypeReference<List<MenuItemApi>>() {});
-        } catch (URISyntaxException | IOException | InterruptedException e) {
+        final var request = new HttpGet(apiUrl);
+        try(
+            CloseableHttpClient client = HttpClients.createDefault();
+            CloseableHttpResponse response = client.execute(request);
+        ) {
+            return mapper.readValue(response.getEntity().getContent(), new TypeReference<List<MenuItemApi>>() {});
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
