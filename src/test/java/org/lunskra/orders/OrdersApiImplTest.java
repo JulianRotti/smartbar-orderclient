@@ -35,7 +35,7 @@ public class OrdersApiImplTest {
     }
 
     @Test
-    void shouldGetAllArticles() {
+    void shouldGetTableNameFromOrder() {
         final Response response = given()
             .when().get("/orders")
             .then()
@@ -43,7 +43,6 @@ public class OrdersApiImplTest {
             .extract().response();
 
         final JsonPath jsonPath = response.jsonPath();
-
         Assertions.assertEquals("MockTable", jsonPath.getString("[0].tableName"));
     }
 }
