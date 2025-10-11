@@ -1,22 +1,13 @@
 package org.lunskra.menu;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.apache.hc.client5.http.classic.methods.HttpGet;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.core.GenericType;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.lunskra.smartbar.backoffice.model.MenuItemApi;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
 @ApplicationScoped
@@ -34,14 +25,8 @@ public class MenuApiClientImpl implements MenuApiClient {
 
     @Override
     public List<MenuItemApi> getMenu() {
-        final var request = new HttpGet(apiUrl);
-        try(
-            CloseableHttpClient client = HttpClients.createDefault();
-            CloseableHttpResponse response = client.execute(request);
-        ) {
-            return mapper.readValue(response.getEntity().getContent(), new TypeReference<List<MenuItemApi>>() {});
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        try (var client = ClientBuilder.newClient()) {
+            return client.target(apiUrl).request().get(new GenericType<List<MenuItemApi>>() {});
         }
     }
 }

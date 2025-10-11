@@ -10,7 +10,6 @@ import org.lunskra.smartbar.orderclient.model.MenuItem;
 
 import java.util.List;
 
-@NonBlocking
 public class LoginsApiImpl implements LoginsApi {
 
     private final MenuApiClient menuApiClient;
