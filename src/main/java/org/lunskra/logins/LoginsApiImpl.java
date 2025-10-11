@@ -1,15 +1,14 @@
 package org.lunskra.logins;
 
-import io.smallrye.common.annotation.NonBlocking;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.lunskra.menu.MenuApiClient;
 import org.lunskra.menu.MenuMapper;
 import org.lunskra.smartbar.orderclient.api.LoginsApi;
-import org.lunskra.smartbar.orderclient.model.MenuItem;
+import org.lunskra.smartbar.orderclient.model.LoginResponse;
 
-import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletionStage;
 
 public class LoginsApiImpl implements LoginsApi {
 
@@ -24,8 +23,14 @@ public class LoginsApiImpl implements LoginsApi {
     }
 
     @Override
-    public Response postLoginFromTable(Long tableId) {
-        List<MenuItem> menu = menuMapper.toOrderClient(menuApiClient.getMenu());
-        return Response.ok(menu).build();
+    public CompletionStage<LoginResponse> postLoginFromTable(Long tableId) {
+        return menuApiClient.getMenu()
+                .thenApply(menuMapper::toOrderClient)
+                .thenApply(items -> {
+                    LoginResponse loginResponse = new LoginResponse();
+                    loginResponse.setLoginToken(UUID.randomUUID());
+                    loginResponse.setMenu(items);
+                    return loginResponse;
+                });
     }
 }

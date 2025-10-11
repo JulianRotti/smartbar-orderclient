@@ -23,14 +23,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: false
-                required: [loginToken, menu]
-                properties:
-                  loginToken:
-                    $ref: '#/components/schemas/LoginToken'
-                  menu:
-                    $ref: '#/components/schemas/Menu'
+                $ref: '#/components/schemas/LoginResponse'
         '404':
           $ref: '#/components/responses/404'
 
@@ -187,6 +180,15 @@ components:
       bearerFormat: JWT
 
   schemas:
+    LoginResponse:
+      type: object
+      additionalProperties: false
+      required: [loginToken, menu]
+      properties:
+        loginToken:
+          $ref: '#/components/schemas/LoginToken'
+        menu:
+          $ref: '#/components/schemas/Menu'
     Menu:
       type: array
       minItems: 1

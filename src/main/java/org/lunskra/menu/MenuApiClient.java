@@ -6,11 +6,12 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.lunskra.smartbar.backoffice.model.MenuItemApi;
 
 import java.util.List;
+import java.util.concurrent.CompletionStage;
 
 @Path("/menu")
 @RegisterRestClient
 public interface MenuApiClient {
 
     @GET
-    List<MenuItemApi> getMenu();
+    CompletionStage<List<MenuItemApi>> getMenu();
 }

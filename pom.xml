@@ -160,7 +160,7 @@
                                 <useJakartaEe>true</useJakartaEe>
                                 <useSwaggerAnnotations>false</useSwaggerAnnotations>
                                 <interfaceOnly>true</interfaceOnly>
-                                <returnResponse>true</returnResponse>
+                                <supportAsync>true</supportAsync>
                             </configOptions>
                         </configuration>
                     </execution>

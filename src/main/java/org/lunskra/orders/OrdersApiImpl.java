@@ -1,10 +1,8 @@
 package org.lunskra.orders;
 
 import jakarta.inject.Inject;
-import jakarta.validation.Valid;
 import jakarta.ws.rs.core.Response;
 import org.lunskra.smartbar.orderclient.api.OrdersApi;
-import org.lunskra.smartbar.orderclient.model.Order;
 import org.lunskra.smartbar.orderclient.model.OrderItem;
 import org.lunskra.smartbar.orderclient.model.OrderStatus;
 import org.lunskra.smartbar.orderclient.model.UpdateOrderRequest;
@@ -12,7 +10,7 @@ import org.lunskra.smartbar.orderclient.model.UpdateOrderRequest;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
-
+/* #TODO: async implementation instead of Response model
 public class OrdersApiImpl implements OrdersApi {
 
     private final OrdersService ordersService;
@@ -52,3 +50,4 @@ public class OrdersApiImpl implements OrdersApi {
         return Response.created(URI.create("http://done.it")).build();
     }
 }
+ */
