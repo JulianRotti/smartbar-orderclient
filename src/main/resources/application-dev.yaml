@@ -2,3 +2,6 @@ quarkus:
   rest-client:
     org.lunskra.menu.MenuApiClient:
       url: "http://localhost:8088"
+  cache:
+    caffeine:
+      expire-after-write: PT10S
