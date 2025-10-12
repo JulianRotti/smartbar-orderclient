@@ -1,5 +1,6 @@
 package org.lunskra.logins;
 
+import io.quarkus.cache.CacheResult;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.lunskra.menu.MenuApiClient;
@@ -34,3 +35,6 @@ public class LoginsApiImpl implements LoginsApi {
                 });
     }
 }
+
+
+
