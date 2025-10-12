@@ -3,5 +3,8 @@ quarkus:
     org.lunskra.menu.MenuApiClient:
       url: "http://localhost:8088"
   cache:
-    caffeine:
+    redis:
       expire-after-write: PT10S
+      #menu-cache:
+      #  key-type: java.lang.Long
+      #  value-type: org.lunskra.smartbar.orderclient.model.LoginResponse
