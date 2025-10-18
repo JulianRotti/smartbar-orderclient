@@ -1,19 +1,17 @@
 package org.lunskra.logins.mongopanache;
 
 import io.quarkus.mongodb.panache.common.MongoEntity;
-import io.quarkus.mongodb.panache.reactive.ReactivePanacheMongoEntity;
-import io.smallrye.mutiny.Uni;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.time.Instant;
 
 @MongoEntity(database = "smartbar", collection = "logins-timed")
-public class Logins extends ReactivePanacheMongoEntity {
+public class Logins {
 
     @BsonProperty("tableNumber")
-    public Long tableId;
-    public String token;
-    public Instant expiresAt;
+    private Long tableId;
+    private String token;
+    private Instant expiresAt;
 
     public Logins(Long tableId, String token, Instant expiresAt) {
         this.tableId = tableId;
@@ -24,7 +22,27 @@ public class Logins extends ReactivePanacheMongoEntity {
     public Logins() {
     }
 
-    public static Uni<Logins> findByTableId(Long tableId) {
-        return find("tableNumber", tableId).firstResult();
+    public Long getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(Long tableId) {
+        this.tableId = tableId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Instant getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(Instant expiresAt) {
+        this.expiresAt = expiresAt;
     }
 }
