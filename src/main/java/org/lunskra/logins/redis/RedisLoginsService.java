@@ -1,18 +1,18 @@
-package org.lunskra.logins;
+package org.lunskra.logins.redis;
 
 import io.quarkus.redis.client.RedisClientName;
 import io.quarkus.redis.datasource.ReactiveRedisDataSource;
 import io.quarkus.redis.datasource.keys.ReactiveKeyCommands;
 import io.quarkus.redis.datasource.value.ReactiveValueCommands;
 import io.smallrye.mutiny.Uni;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.lunskra.logins.LoginsService;
 
 import java.util.UUID;
 
 
 // @ApplicationScoped //comment out if other implementation of service is used
-public class RedisLoginsService implements LoginsService{
+public class RedisLoginsService implements LoginsService {
 
     private final ReactiveValueCommands<Long, UUID> tokens;
     private final ReactiveKeyCommands<Long> keys;

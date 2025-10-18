@@ -1,18 +1,18 @@
-package org.lunskra.logins;
+package org.lunskra.logins.mongo;
 
 import io.quarkus.mongodb.MongoClientName;
 import io.quarkus.mongodb.reactive.ReactiveMongoClient;
 import io.quarkus.mongodb.reactive.ReactiveMongoCollection;
 import io.smallrye.mutiny.Uni;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.bson.Document;
+import org.lunskra.logins.LoginsService;
 
 import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
-@ApplicationScoped
+// @ApplicationScoped //comment out if other implementation of service is used
 public class MongoLoginsService implements LoginsService {
 
     private final ReactiveMongoClient reactiveMongoClient;
