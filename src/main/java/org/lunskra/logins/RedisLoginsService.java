@@ -11,7 +11,7 @@ import jakarta.inject.Inject;
 import java.util.UUID;
 
 
-@ApplicationScoped
+// @ApplicationScoped //comment out if other implementation of service is used
 public class RedisLoginsService implements LoginsService{
 
     private final ReactiveValueCommands<Long, UUID> tokens;
