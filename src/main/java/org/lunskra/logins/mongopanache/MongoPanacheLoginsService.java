@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
-@ApplicationScoped
+// @ApplicationScoped //comment out if other implementation of service is used
 public class MongoPanacheLoginsService implements LoginsService {
 
     private final LoginsRepository loginsRepository;
