@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
-// @ApplicationScoped //comment out if other implementation of service is used
+@ApplicationScoped //comment out if other implementation of service is used
 public class MongoPanacheLoginsService implements LoginsService {
 
     private final LoginsRepository loginsRepository;
@@ -30,5 +30,10 @@ public class MongoPanacheLoginsService implements LoginsService {
     @Override
     public Uni<Boolean> hasLogin(long tableId) {
         return loginsRepository.findByTableId(tableId).map(Objects::nonNull);
+    }
+
+    @Override
+    public Uni<Logins> findLoginByToken(UUID loginToken) {
+        return loginsRepository.findByLoginToken(loginToken);
     }
 }

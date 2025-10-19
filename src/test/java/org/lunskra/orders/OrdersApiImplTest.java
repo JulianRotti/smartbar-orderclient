@@ -12,7 +12,10 @@ import org.lunskra.smartbar.orderclient.model.OrderItem;
 import org.lunskra.smartbar.orderclient.model.OrderStatus;
 import org.mockito.Mockito;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 
@@ -24,14 +27,14 @@ public class OrdersApiImplTest {
 
     @BeforeEach
     void setUp() {
+        Order order = new Order();
+        order.setOrderedArticles(List.of(new OrderItem(1L, 2)));
+        order.setLoginToken(UUID.randomUUID());
+        order.setStatus(OrderStatus.PENDING);
+        order.setTableId(1000L);
+        order.setPlacedAt(Date.from(Instant.now()));
         Mockito.when(ordersServiceMock.getAllOrders())
-            .thenReturn(List.of(
-                new Order(
-                        "MockTable",
-                        OrderStatus.ACCEPTED,
-                        List.of(new OrderItem(1L, 5))
-                )
-            ));
+            .thenReturn(List.of(order));
     }
 
     @Test
@@ -43,7 +46,7 @@ public class OrdersApiImplTest {
             .extract().response();
 
         final JsonPath jsonPath = response.jsonPath();
-        Assertions.assertEquals("MockTable", jsonPath.getString("[0].tableName"));
+        Assertions.assertEquals(1000L, jsonPath.getLong("[0].tableId"));
     }
 }
 

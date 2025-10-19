@@ -237,6 +237,7 @@ components:
       properties:
         articleId: { type: integer, format: int64 }
         quantity:  { type: integer, minimum: 1 }
+        price: {type: number, format: double, multipleOf: 0.01, minimum: 0}
 
     OrderItems:
       type: array
@@ -256,8 +257,11 @@ components:
         placedAt:
           type: string
           format: date-time
-        tableName:
-          type: string
+        tableId:
+          type: integer
+          format: int64
+        loginToken:
+          $ref: '#/components/schemas/LoginToken'
         status:
           $ref: '#/components/schemas/OrderStatus'
         orderedArticles:
