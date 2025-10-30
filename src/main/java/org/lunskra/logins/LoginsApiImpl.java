@@ -12,7 +12,6 @@ import org.lunskra.smartbar.orderclient.model.LoginResponse;
 
 import java.util.concurrent.CompletionStage;
 
-@ApplicationScoped
 public class LoginsApiImpl implements LoginsApi {
 
     private final MenuApiClient menuApiClient;

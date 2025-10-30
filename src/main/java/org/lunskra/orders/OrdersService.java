@@ -5,15 +5,12 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.bson.types.ObjectId;
 import org.lunskra.logins.mongopanache.Logins;
-import org.lunskra.logins.mongopanache.LoginsRepository;
 import org.lunskra.smartbar.orderclient.model.Order;
 import org.lunskra.smartbar.orderclient.model.OrderItem;
 import org.lunskra.smartbar.orderclient.model.OrderStatus;
 
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @ApplicationScoped
 public class OrdersService {
@@ -39,6 +36,10 @@ public class OrdersService {
         order.setStatus(OrderStatus.PENDING);
         order.setPlacedAt(placedAt);
         order.setTableId(login.getTableId());
+
+        List<List<Integer>> result = new ArrayList<>();
+        HashSet<Integer> hs = new HashSet<>();
+        result.add(Arrays.asList(1,2,3)); 
 
         return this.ordersRepository.persist(order).map(OrderEntity::getId);
     }
