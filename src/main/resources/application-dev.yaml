@@ -8,16 +8,15 @@ quarkus:
   mongodb:
     connection-string: mongodb://localhost:27017
     uuid-representation: java-legacy
-kafka:
-  bootstrap:
-    servers: localhost:9092
+rabbitmq-host: localhost
+rabbitmq-port: 5672
+rabbitmq-username: smartbar
+rabbitmq-password: smartbar
 mp:
   messaging:
     incoming:
       menu-update-events:
-        connector: smallrye-kafka
-        topic: menu-update-events
-        value:
-          deserializer: org.lunskra.messaging.MasterdataChangedEventDeserializer
-        key:
-          deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        connector: smallrye-rabbitmq
+        queue:
+          name: menuupdates
+
