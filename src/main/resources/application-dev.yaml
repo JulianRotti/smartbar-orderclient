@@ -18,5 +18,11 @@ mp:
       menu-update-events:
         connector: smallrye-rabbitmq
         queue:
-          name: menuupdates
+          name: articles
+    outgoing:
+      order-processed-events:
+        connector: smallrye-rabbitmq
+        exchange:
+          type: topic
+          name: smartbar
 

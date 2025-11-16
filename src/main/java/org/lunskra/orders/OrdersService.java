@@ -37,10 +37,6 @@ public class OrdersService {
         order.setPlacedAt(placedAt);
         order.setTableId(login.getTableId());
 
-        List<List<Integer>> result = new ArrayList<>();
-        HashSet<Integer> hs = new HashSet<>();
-        result.add(Arrays.asList(1,2,3)); 
-
         return this.ordersRepository.persist(order).map(OrderEntity::getId);
     }
 }

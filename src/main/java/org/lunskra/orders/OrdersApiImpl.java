@@ -6,6 +6,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.core.Response;
 import org.lunskra.logins.LoginsService;
+import org.lunskra.messaging.OrderProcessedMessagingService;
 import org.lunskra.smartbar.orderclient.api.OrdersApi;
 import org.lunskra.smartbar.orderclient.model.OrderItem;
 import org.lunskra.smartbar.orderclient.model.OrderStatus;
@@ -21,11 +22,13 @@ public class OrdersApiImpl implements OrdersApi {
 
     private final OrdersService ordersService;
     private final LoginsService loginsService;
+    private final OrderProcessedMessagingService orderProcessedMessagingService;
 
     @Inject
-    public OrdersApiImpl(OrdersService ordersService, LoginsService loginsService) {
+    public OrdersApiImpl(OrdersService ordersService, LoginsService loginsService, OrderProcessedMessagingService orderProcessedMessagingService) {
         this.ordersService = ordersService;
         this.loginsService = loginsService;
+        this.orderProcessedMessagingService = orderProcessedMessagingService;
     }
 
     @Override
@@ -60,8 +63,12 @@ public class OrdersApiImpl implements OrdersApi {
                 .findLoginByToken(loginToken)
                 .chain(login -> {
                     if (login == null) return getTokenNotValid();
+
                     return ordersService
                             .createOrderForLogin(login, orderItem)
+                            .chain(orderId -> orderProcessedMessagingService
+                                    .fireOrderProcessedEvent(orderItem)
+                                    .replaceWith(orderId))
                             .map(orderId -> Response.created(URI.create("/orders/" + orderId.toString())).build());
                 })
                 .subscribeAsCompletionStage();
